@@ -1,17 +1,23 @@
 <?php
 
+namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
 class Category
 {
-    use ORMBehaviors\Translatable\Translatable; 
-
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
-    protected $someFieldYouDoNotNeedToTranslate;
+    private $id;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 }
