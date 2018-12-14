@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% for locale in locales if (locale != app.request.locale) %}
+            <a href = "{{ path(app.request.attributes.get('_route'), app.request.get('_route_params')|merge({_locale: locale})) }}">{{ locale | upper}}</a>
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
