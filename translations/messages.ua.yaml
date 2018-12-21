@@ -1,4 +1,27 @@
 words.hello: Здрастуйте!
-'This friendly message is coming from': Це дружнє повідомлення йде від
-'Your controller at': Ваш контролер на
-'Your template at': Ваш шаблон на
+'This friendly message is coming from': 'Це дружнє повідомлення йде від'
+'Your controller at': 'Ваш контролер на'
+'Your template at': 'Ваш шаблон на'
+'$ US dollar': 'Долар США'
+'EUR Euro': 'EUR євро'
+UAH: Грн
+Register: Реєструйся
+'Sign in': Увійти
+Copyright: Copyright
+'All rights reserved': 'Всі права захищені'
+'Got Question? Call Us 24/7': 'Є питання? Дзвоніть нам цілодобово'
+Kharkiv: Харків
+Ukraine: Україна
+'Find it Fast': 'Find it Fast'
+'Customer Care': 'Обслуговування клієнтів'
+'My Account': 'Мій рахунок'
+'Order Tracking': 'Відстеження замовлення'
+'Wish List': 'Список побажань'
+'Customer Services': 'Обслуговування клієнтів'
+'Returns / Exchange': 'Повернення / обмін'
+FAQs: 'Часті питання'
+'Product Support': 'Підтримка продуктів'
+'Search for products...': 'Пошук продуктів ...'
+'All Categories': 'всі категорії'
+Wishlist: 'Список побажань'
+Cart: 'Кошик'

@@ -1,20 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'words.hello' | trans }} {{ controller_name }}!{% endblock %}
+{% block title %}{{ 'words.hello' | trans }}!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block categories_menu %}
+<div class="cat_menu_container">
+    <div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
+        <div class="cat_burger"><span></span><span></span><span></span></div>
+        <div class="cat_menu_text">{{'categories' | trans}}</div>
+    </div>
 
-<div class="example-wrapper">
-    <h1>{{ 'This friendly message is coming from' | trans }} {{ controller_name }}! ✅</h1>
-
-
-    <ul>
-        <li>{{ 'Your controller at' | trans }}<code><a href="{{ 'src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code></li>
-        <li>{{ 'Your template at' | trans }} <code><a href="{{ 'templates/main/index.html.twig'|file_link(0) }}">templates/main/index.html.twig</a></code></li>
+    <ul class="cat_menu">
+        {% for category in categories %}
+            {% if category.enableChildren %}
+                <li class="hassubs">
+                    <a href="#">{{ category.defaultname }}<i class="fas fa-chevron-right"></i></a>
+                    <ul>
+                        {% for childcategory in category.children %}
+                            <li><a href="{{ path('category_show', {'id': childcategory.id}) }}">{{ childcategory.defaultname }}<i class="fas fa-chevron-right"></i></a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+             {% else %}
+                <li><a href="{{ path('category_show', {'id': category.id}) }}">{{ category.defaultname }}<i class="fas fa-chevron-right ml-auto"></i></a></li>
+            {% endif %}
+        {% endfor %}
     </ul>
 </div>
+{% endblock %}
+
+{% block main_nav_menu%}
+    <!-- Main Nav Menu -->
+    <!-- Product Panel -->
+    <div class="product_panel panel active">
+        <div class="featured_slider slider">
+
+            {% for product in products %}
+                <!-- Slider Item -->
+                <div class="featured_slider_item">
+                    <div class="border_active"></div>
+                    <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="product_image d-flex flex-column align-items-center justify-content-center"><img src="images/featured_3.png" alt=""></div>
+                        <div class="product_content">
+                            <div class="product_price">{{ product.cost }}</div>
+                            <div class="product_name"><div><a href="{{ path ('product_show', {'id': product.id})}}">{{ product.defaultname}}</a></div></div>
+                            <div class="product_extras">
+                                <div class="product_color">
+                                    <input type="radio" checked name="product_color" style="background:#b19c83">
+                                    <input type="radio" name="product_color" style="background:#000000">
+                                    <input type="radio" name="product_color" style="background:#999999">
+                                </div>
+                                <button class="product_cart_button">Add to Cart</button>
+                            </div>
+                        </div>
+                        <div class="product_fav"><i class="fas fa-heart"></i></div>
+                        <ul class="product_marks">
+                            <li class="product_mark product_discount"></li>
+                            <li class="product_mark product_new">new</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="featured_slider_dots_cover"></div>
+    </div>
+
 {% endblock %}

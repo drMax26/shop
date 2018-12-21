@@ -1,4 +1,27 @@
 words.hello: Hello!
-'This friendly message is coming from': This friendly message is coming from
-'Your controller at': Your controller at
-'Your template at': Your template at
+'This friendly message is coming from': 'This friendly message is coming from'
+'Your controller at': 'Your controller at'
+'Your template at': 'Your template at'
+'$ US dollar': '$ US dollar'
+'EUR Euro': 'EUR Euro'
+UAH: UAH
+Register: Register
+'Sign in': 'Sign in'
+Copyright: Copyright
+'All rights reserved': 'All rights reserved'
+'Got Question? Call Us 24/7': 'Got Question? Call Us 24/7'
+Kharkiv: Kharkiv
+Ukraine: Ukraine
+'Find it Fast': 'Find it Fast'
+'Customer Care': 'Customer Care'
+'My Account': 'My Account'
+'Order Tracking': 'Order Tracking'
+'Wish List': 'Wish List'
+'Customer Services': 'Customer Services'
+'Returns / Exchange': 'Returns / Exchange'
+FAQs: FAQs
+'Product Support': 'Product Support'
+'Search for products...': 'Search for products...'
+'All Categories': 'All Categories'
+Wishlist: Wishlist
+Cart: Cart

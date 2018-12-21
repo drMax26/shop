@@ -1,16 +1,59 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="OneTech shop project">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title %}My Company{% endblock %}</title>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="/styles/bootstrap4/bootstrap.min.css">
+            <link rel="stylesheet" type="text/css" href="/plugins/fontawesome-free-5.0.1/css/fontawesome-all.css">
+            <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+            <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+            <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/animate.css">
+            <link rel="stylesheet" type="text/css" href="/plugins/slick-1.8.0/slick.css">
+            <link rel="stylesheet" type="text/css" href="/styles/main_styles.css">
+            <link rel="stylesheet" type="text/css" href="/styles/responsive.css">
+        {% endblock %}
     </head>
     <body>
-        {% for locale in locales if (locale != app.request.locale) %}
-            <a href = "{{ path(app.request.attributes.get('_route'), app.request.get('_route_params')|merge({_locale: locale})) }}">{{ locale | upper}}</a>
-        {% endfor %}
+        {% block header %}
+            {% include 'header.html.twig' %}
+        {% endblock %}
 
-        {% block body %}{% endblock %}
+        {% block body %}
+            <nav class="main_nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="main_nav_content d-flex flex-row">
+                                {% block categories_menu %}
+                                    <!-- Categories Menu -->
+
+                                {% endblock %}
+
+                                {% block main_nav_menu%}
+                                    <!-- Main Nav Menu -->
+
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        {% endblock %}
+
+        {% block footer %}
+            {% include 'footer.html.twig' %}
+        {% endblock %}
+
+        {% block copyright %}
+            {% include 'copyright.html.twig' %}
+        {% endblock %}
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>
