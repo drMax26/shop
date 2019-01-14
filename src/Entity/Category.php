@@ -52,6 +52,8 @@ class Category
     private $children;
 
     private $enableChildren;
+	
+	private $fullParent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Products", mappedBy="category")
@@ -95,6 +97,18 @@ class Category
     public function setParent(?int $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+	
+	public function getFullParent()
+    {
+        return $this->fullParent;
+    }
+
+    public function setFullParent(Category $fullParent): self
+    {
+        $this->fullParent = $fullParent;
 
         return $this;
     }

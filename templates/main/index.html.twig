@@ -2,66 +2,73 @@
 
 {% block title %}{{ 'words.hello' | trans }}!{% endblock %}
 
-{% block categories_menu %}
-<div class="cat_menu_container">
-    <div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
-        <div class="cat_burger"><span></span><span></span><span></span></div>
-        <div class="cat_menu_text">{{'categories' | trans}}</div>
-    </div>
-
-    <ul class="cat_menu">
-        {% for category in categories %}
-            {% if category.enableChildren %}
-                <li class="hassubs">
-                    <a href="#">{{ category.defaultname }}<i class="fas fa-chevron-right"></i></a>
-                    <ul>
-                        {% for childcategory in category.children %}
-                            <li><a href="{{ path('category_show', {'id': childcategory.id}) }}">{{ childcategory.defaultname }}<i class="fas fa-chevron-right"></i></a></li>
-                        {% endfor %}
-                    </ul>
-                </li>
-             {% else %}
-                <li><a href="{{ path('category_show', {'id': category.id}) }}">{{ category.defaultname }}<i class="fas fa-chevron-right ml-auto"></i></a></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-</div>
+{% block leftmenu %}
+	{% macro recursiveCategory(category) %}
+		{% if category.enableChildren %}
+			{% import _self as leftmenu %}
+			<li>
+				<a href="{{ path('category_show', {'id': category.id}) }}">
+					<img src = "/images/categories/{{ category.id }}.jpg" height = "30px">
+					{{ category.defaultname }}
+					<span class="fa fa-angle-down">></span>
+				</a>
+				<ul class="submenu">
+					{% for child in category.children %}
+						{{ leftmenu.recursiveCategory(child) }}
+					{% endfor %}
+				</ul>
+			</li>
+		{% else %}
+			<li>
+				<a href="{{ path('category_show', {'id': category.id}) }}">
+					<img src = "/images/categories/{{ category.id }}.jpg" height = "30px">
+					{{ category.defaultname }}
+				</a>
+			</li>
+		{% endif %}
+	{% endmacro %}
+	
+	{% import _self as leftmenu %}
+	<nav>
+		<ul class="topmenu">
+		{% for category in categories %}
+			{{ leftmenu.recursiveCategory(category) }}
+		{% endfor %}
+		</ul>
+	</nav>
 {% endblock %}
 
-{% block main_nav_menu%}
-    <!-- Main Nav Menu -->
-    <!-- Product Panel -->
-    <div class="product_panel panel active">
-        <div class="featured_slider slider">
+{% block content %}
+	{% if products %}
+		{% include '/products.html.twig' %}
+	{% else %}
+		{% if childCategories %}
+			{% include '/categories.html.twig'%}
+		{% else %}
+			{{ 'errors.no_product_in_category' | trans }}
+		{% endif %}
+	{% endif %}
+{% endblock %}
 
-            {% for product in products %}
-                <!-- Slider Item -->
-                <div class="featured_slider_item">
-                    <div class="border_active"></div>
-                    <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
-                        <div class="product_image d-flex flex-column align-items-center justify-content-center"><img src="images/featured_3.png" alt=""></div>
-                        <div class="product_content">
-                            <div class="product_price">{{ product.cost }}</div>
-                            <div class="product_name"><div><a href="{{ path ('product_show', {'id': product.id})}}">{{ product.defaultname}}</a></div></div>
-                            <div class="product_extras">
-                                <div class="product_color">
-                                    <input type="radio" checked name="product_color" style="background:#b19c83">
-                                    <input type="radio" name="product_color" style="background:#000000">
-                                    <input type="radio" name="product_color" style="background:#999999">
-                                </div>
-                                <button class="product_cart_button">Add to Cart</button>
-                            </div>
-                        </div>
-                        <div class="product_fav"><i class="fas fa-heart"></i></div>
-                        <ul class="product_marks">
-                            <li class="product_mark product_discount"></li>
-                            <li class="product_mark product_new">new</li>
-                        </ul>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="featured_slider_dots_cover"></div>
-    </div>
+{% block breadcrumbs%}
+	{% macro recursiveParent(previousText, breadCrumbsRecursive) %}
+		{% if breadCrumbsRecursive.fullParent %}
+			{% import _self as breadCrumbsMenu %}
+			{% if '' == previousText %}
+				{{ breadCrumbsMenu.recursiveParent(breadCrumbsRecursive.defaultname, breadCrumbsRecursive.fullParent) }}
+			{% else %}
+				{{ breadCrumbsMenu.recursiveParent('<a href = "' ~ path('category_show', {'id': breadCrumbsRecursive.id}) ~ '">' ~ breadCrumbsRecursive.defaultname ~ '</a> -> ' ~ previousText, breadCrumbsRecursive.fullParent) }}
+			{% endif %}
+		{% else %}
+			{% set resulttext = '<a href = "/">shop</a> -> ' ~ previousText %}
+			{{ resulttext | raw }}
+		{% endif %}
+	{% endmacro %}
+
+
+    {% if breadCrumbs %}
+		{% import _self as breadCrumbsMenu %}
+		{{ breadCrumbsMenu.recursiveParent('', breadCrumbs) }}
+	{% endif %}
 
 {% endblock %}

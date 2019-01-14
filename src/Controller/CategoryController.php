@@ -50,23 +50,27 @@ class CategoryController extends AbstractController
     /**
      * @Route("/{id}", name="category_show", methods="GET")
      */
-    public function show(Category $category, CategoryRepository $CategoryRepository, ProductsRepository $ProductsRepository): Response
+    public function show(Category $category, CategoryRepository $CategoryRepository, ProductsRepository $ProductsRepository, Request $request): Response
     {
-        $categories = $CategoryRepository->getAllParent();
-        $countParent = count($categories);
-
-        for ($i = 0; $i < $countParent; $i++) {
-            $categories[$i]->setChildren($CategoryRepository->getChildrenByParentId($categories[$i]->getId()));
-        }
-
+        $categories = $CategoryRepository->getAllCategoriesWithChildren();
         $products = $ProductsRepository->getProductsByCategory($category->getId());
-        dump($categories);
-        dump($products);
+		$childCategories = $CategoryRepository->getRecursiveChild($category->getId());
+		
+		$breadCrumbs = $CategoryRepository->getRecursiveParents($category);
+		
+		//dump($categories);
+		//dump($products);
+		//dump($childCategories);
+		dump($breadCrumbs);
 
         return $this->render('main/index.html.twig', [
             'controller_name' => 'MainController',
             'categories' => $categories,
             'products' => $products,
+			'childCategories' => $childCategories,
+			'breadCrumbs' => $breadCrumbs,
+			'wishListCount' => count($request->getSession()->get('whishList')),
+			'cartCount' => count($request->getSession()->get('cart')),
         ]);
         //return $this->render('category/show.html.twig', ['category' => $category]);
     }

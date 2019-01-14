@@ -26,6 +26,15 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+	
+	public function getCategoryById($id)
+    {
+        return $this->createQueryBuilder('category')
+            ->andWhere('category.id = :id')
+			->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
+    }
 
     public function getChildrenByParentId($parentId)
     {
@@ -35,6 +44,49 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getByParentChildrenId($categoryId)
+    {
+        return $this->createQueryBuilder('category')
+            ->andWhere('category.id = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getResult();
+    }
+	
+	public function getAllCategoriesWithChildren()
+	{
+		$categories = $this->getAllParent();
+		$countParent = count($categories);
+
+        for ($i = 0; $i < $countParent; $i++) {
+			$categories[$i]->setChildren($this->getRecursiveChild($categories[$i]->getId()));
+        }
+		return $categories;
+	}
+	
+	public function getRecursiveChild($id)
+	{
+		$categories = $this->getChildrenByParentId($id);
+        $countParent = count($categories);
+		
+        for ($i = 0; $i < $countParent; $i++) {
+            $categories[$i]->setChildren($this->getRecursiveChild($categories[$i]->getId()));
+		}
+		return $categories;
+	}
+	
+	public function getRecursiveParents($category)
+	{
+		$categories = $category;
+		//dump($categories);
+		
+		if ($ParentId = $category->getParent()) {
+			$categories->setFullParent($this->getRecursiveParents($this->getByParentChildrenId($ParentId)[0]));
+		}
+		/**/
+		return $categories;
+	}
 
     // /**
     //  * @return Category[] Returns an array of Category objects

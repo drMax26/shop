@@ -1,36 +1,35 @@
-<div class="top_bar">
-    <div class="container">
-        <div class="row">
-            <div class="col d-flex flex-row">
-                <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="/images/phone.png" alt=""></div>+38 067 910 2220</div>
-                <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="/images/mail.png" alt=""></div><a href="mailto:fastsales@gmail.com">MaksymIKononenko@gmail.com</a></div>
-                <div class="top_bar_content ml-auto">
-                    <div class="top_bar_menu">
-                        <ul class="standard_dropdown top_bar_dropdown">
-                            <li>
-                                <a href="#">{{ app.request.locale | upper}}<i class="fas fa-chevron-down"></i></a>
-                                <ul>
-                                    {% for locale in locales if (locale != app.request.locale) %}
-                                        <li><a href = "{{ path(app.request.attributes.get('_route'), app.request.get('_route_params')|merge({_locale: locale})) }}">{{ locale | upper}}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">{{ '$ US dollar' | trans }}<i class="fas fa-chevron-down"></i></a>
-                                <ul>
-                                    <li><a href="#">{{ 'EUR Euro' | trans}}</a></li>
-                                    <li><a href="#">{{ 'UAH' | trans}}</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="top_bar_user">
-                        <div class="user_icon"><img src="/images/user.svg" alt=""></div>
-                        <div><a href="#">{{ 'Register' | trans }}</a></div>
-                        <div><a href="#">{{ 'Sign in' | trans}}</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class = "top_menu">
+	<img src="/images/phone.png" alt="">+38 067 910 2220
+	<img src="/images/mail.png" alt=""><a href="mailto:fastsales@gmail.com">MaksymIKononenko@gmail.com</a>
+	
+	<select id = "language">
+		<option selected = "selected">{{ app.request.locale | upper}}</option>
+		{% for locale in locales if (locale != app.request.locale)%}
+				<option value = "{{ path(app.request.attributes.get('_route'), app.request.get('_route_params')|merge({_locale: locale})) }}"> {{ locale | upper}}</option>
+		{% endfor %}
+	</select>
+	
+	<select id = "money">
+		<option>{{ '$ US dollar' | trans }}</option>
+		<option>{{ 'EUR Euro' | trans}}</option>
+		<option>{{ 'UAH' | trans}}</option>
+	</select>
+	
+	<img src="/images/user.svg" alt="" widht = 30px>
+	{% if app.user %}
+		<a href="/logout">{{ 'Log Out' | trans}}</a>
+	{% else %}
+		<a href="/register">{{ 'Register' | trans }}</a>
+		<a href="/login">{{ 'Sign in' | trans}}</a>
+	{% endif %}
+</div>
+
+<div class = "top_menu">
+	<img src="/images/heart.png" alt="">
+	{{wishListCount}}
+</div>
+
+<div class = "top_menu">
+	<img src="/images/cart.png" alt="">
+	{{cartCount}}
 </div>

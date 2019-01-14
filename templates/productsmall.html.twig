@@ -1,0 +1,7 @@
+<div class = "product">
+	<a href = "{{ path ('product_show', {'id': product.id}) }}">{{ product.defaultname }}</a>
+	
+	<br><a href = "{{ path ('add-to-whish-list', {'id': product.id}) }}">{{ 'Add_to_Whish_list' | trans }}</a>
+	<br><a href = "{{ path ('add-to-cart', {'id': product.id}) }}">{{ 'Add_to_Cart' | trans }}</a>
+
+</div>

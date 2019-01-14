@@ -1,34 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.defaultname }}!{% endblock %}
+{% block title %}{{ 'words.hello' | trans }}!{% endblock %}
 
-{% block categories_menu %}
-    <div class="cat_menu_container">
-        <div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
-            <div class="cat_burger"><span></span><span></span><span></span></div>
-            <div class="cat_menu_text">{{'categories' | trans}}</div>
-        </div>
-
-        <ul class="cat_menu">
-            {% for category in categories %}
-                {% if category.enableChildren %}
-                    <li class="hassubs">
-                        <a href="#">{{ category.defaultname }}<i class="fas fa-chevron-right"></i></a>
-                        <ul>
-                            {% for childcategory in category.children %}
-                                <li><a href="{{ path('category_show', {'id': childcategory.id}) }}">{{ childcategory.defaultname }}<i class="fas fa-chevron-right"></i></a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                {% else %}
-                    <li><a href="{{ path('category_show', {'id': category.id}) }}">{{ category.defaultname }}<i class="fas fa-chevron-right ml-auto"></i></a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
+{% block leftmenu %}
+	{% macro recursiveCategory(category) %}
+		{% if category.enableChildren %}
+			{% import _self as leftmenu %}
+			<li>
+				<a href="{{ path('category_show', {'id': category.id}) }}">
+					<img src = "/images/categories/{{ category.id }}.jpg" height = "30px">
+					{{ category.defaultname }}
+					<span class="fa fa-angle-down">></span>
+				</a>
+				<ul class="submenu">
+					{% for child in category.children %}
+						{{ leftmenu.recursiveCategory(child) }}
+					{% endfor %}
+				</ul>
+			</li>
+		{% else %}
+			<li>
+				<a href="{{ path('category_show', {'id': category.id}) }}">
+					<img src = "/images/categories/{{ category.id }}.jpg" height = "30px">
+					{{ category.defaultname }}
+				</a>
+			</li>
+		{% endif %}
+	{% endmacro %}
+	
+	{% import _self as leftmenu %}
+	<nav>
+		<ul class="topmenu">
+		{% for category in categories %}
+			{{ leftmenu.recursiveCategory(category) }}
+		{% endfor %}
+		</ul>
+	</nav>
 {% endblock %}
 
-{% block main_nav_menu%}
-    {{ product.defaultname }}<br>
-    {{ product.cost }}<br>
+{% block content %}
+	{{ product.defaultname }}
+	<br><a href = "{{ path ('add-to-whish-list', {'id': product.id}) }}">{{ 'Add_to_Whish_list' | trans }}</a>
+	<br><a href = "{{ path ('add-to-cart', {'id': product.id}) }}">{{ 'Add_to_Cart' | trans }}</a>
+{% endblock %}
+
+{% block breadcrumbs%}
+	{% macro recursiveParent(previousText, breadCrumbsRecursive) %}
+		{% if breadCrumbsRecursive.fullParent %}
+			{% import _self as breadCrumbsMenu %}
+			{% if '' == previousText %}
+				{{ breadCrumbsMenu.recursiveParent(breadCrumbsRecursive.defaultname, breadCrumbsRecursive.fullParent) }}
+			{% else %}
+				{{ breadCrumbsMenu.recursiveParent('<a href = "' ~ path('category_show', {'id': breadCrumbsRecursive.id}) ~ '">' ~ breadCrumbsRecursive.defaultname ~ '</a> -> ' ~ previousText, breadCrumbsRecursive.fullParent) }}
+			{% endif %}
+		{% else %}
+			{% set resulttext = '<a href = "/">shop</a> -> ' ~ previousText %}
+			{{ resulttext | raw }}
+		{% endif %}
+	{% endmacro %}
+
+
+    {% if breadCrumbs %}
+		{% import _self as breadCrumbsMenu %}
+		{{ breadCrumbsMenu.recursiveParent('', breadCrumbs) }}
+	{% endif %}
+
 {% endblock %}
